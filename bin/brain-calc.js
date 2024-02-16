@@ -1,44 +1,26 @@
 #!/usr/bin/env node
-import readlineSync from 'readline-sync'; 
-import greeting from '../src/cli.js';
+import gameBody from '../src/GameBody.js';
 
-const userName = greeting();
+const description = 'What is the result of the expression?';
 
-console.log('What is the result of the expression?');
+const task = () => {
+  const operand1 = Math.round(Math.random() * 10);
+  const operand2 = Math.round(Math.random() * 10);
+  const operator = ['+', '*', '-'];
+  const indexOper = Math.floor(Math.random() * 2);
+  let answer = '';
 
-
-function generateQuestion() {
-    const operations = {
-      '+': (a, b) => a + b,
-      '-': (a, b) => a - b,
-      '*': (a, b) => a * b
-    };
-    const num1 = Math.floor(Math.random() * 100) + 1;
-    const num2 = Math.floor(Math.random() * 100) + 1;
-    const operation = ['+', '-', '*'][Math.floor(Math.random() * 3)];
-    const question = `${num1} ${operation} ${num2}`;
-    const correctAnswer = String(operations[operation](num1, num2));
-    return { question, correctAnswer };
+  switch (indexOper) {
+    case 0:
+      answer = `${operand1 + operand2}`;
+      break;
+    case 1:
+      answer = `${operand1 * operand2}`;
+      break;
+    default:
+      answer = `${operand1 - operand2}`;
+      break;
   }
-  
-  function main() {
-  
-    for (let i = 0; i < 3; i++) {
-      const { question, correctAnswer } = generateQuestion();
-      console.log(`Question: ${question}`);
-      const userAnswer = readlineSync.question("Your answer:");
-      if (userAnswer === correctAnswer) {
-        console.log("Correct!");
-      } else {
-        console.log(`Sorry, ${userAnswer} is wrong. Correct answer was ${correctAnswer}.`);
-        console.log(`Let's try again, ${userName}!`);
-        return;
-      }
-    }
-  
-    console.log(`Congratulations, ${userName}!`);
-  }
-  
-  main();
-  
-  
+  return [`${operand1} ${operator[indexOper]} ${operand2} `, answer];
+};
+gameBody(description, task);
